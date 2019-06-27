@@ -1,0 +1,6 @@
+Stock Tracker Plan
+
+So our plan is to create a app that tracks the Major currency pairs that are traded daily on Forex. We will be using API's to pull in data
+of each currency pair and then create Exponential or Simple moving averages to each pair. THe EMA or SMA will consist of a 10, 50 and 100 
+line. When the price crosses the EMA or SMA the user will get a notification which pair crossed the EMA or SMA lines as well as which Line,
+10 50 or 100 was crossed. 
