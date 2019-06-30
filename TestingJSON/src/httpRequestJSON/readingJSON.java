@@ -1,16 +1,16 @@
 package httpRequestJSON;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.json.simple.*; //i dont know why this doesnt work
 //import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 
 public class readingJSON {
@@ -25,8 +25,8 @@ public class readingJSON {
 		StringBuffer responseContent = new StringBuffer();
 
 	      //Method 1 to call HTTP in Java: java.net.HttpURLConnection. This is a method i found online
-	    
-	      URL url = new URL("https://api.exchangeratesapi.io/latest"); //get rates from API
+
+        URL url = new URL("https://api.exchangeratesapi.io/latest?&symbols=CAD,USD,AUD,GBP,JPY,NZD"); //get rates from API. I have no idea what the SPEC means
 	      connections = (HttpURLConnection) url.openConnection();
 
 	      //request setup
@@ -64,8 +64,9 @@ public class readingJSON {
 		try { //I DONT KNOW WHAT THIS DOES
 			objFromRequest = (JSONObject) parser.parse(responseContent.toString()); //i dont know why this needs a try. Basically passing the String into the JSON Obj
 																					//called objFromRequest. FOr some reason you need to Cast it. I dont know why.
-			
-		      System.out.printf("Base Currency pair is %s\n", objFromRequest.get("base").toString()); //prints out just the Base currency that we received from the API
+
+            System.out.printf("Base Currency pair is %s\n", objFromRequest.get("base").toString()); //prints out just the Base currency that we received from the API
+            System.out.printf("Currency pair values as of %s\n", objFromRequest.get("date").toString()); //print the date the data was pulled on
 		      
 		      JSONObject pairs = (JSONObject) objFromRequest.get("rates"); //get the Rates that the server sends and save it in pairs
 				
@@ -95,9 +96,6 @@ public class readingJSON {
 			// TODO Auto-generated catch block
 			System.out.println();
 		}
-
-		
-	      
 	}
 
 }
