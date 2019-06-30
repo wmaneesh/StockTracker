@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.json.simple.*;
+import org.json.simple.*; //i dont know why this doesnt work
 //import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -46,13 +46,13 @@ public class readingJSON {
 	    	  reader.close();
 	      } else {
 	    	  reader = new BufferedReader(new InputStreamReader(connections.getInputStream())); //server is accessbile get data by reading the line of respond
-	    	  while ((line = reader.readLine()) != null) { //while loop to read all lines that are best sent
+	    	  while ((line = reader.readLine()) != null) { //while loop to read all lines that are being sent
 	    	  	responseContent.append(line);
 	    	  	
 	      }
 	    	  reader.close();
 	      }
-	      System.out.println(responseContent.toString()); //print the respond received by the server
+	      System.out.println(responseContent.toString()); //print the respond received by the server as a String
 	      
 
 
