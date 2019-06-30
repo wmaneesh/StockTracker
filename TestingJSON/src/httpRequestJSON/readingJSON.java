@@ -12,7 +12,6 @@ import java.net.URL;
 
 //import org.json.simple.JSONObject;
 
-
 public class readingJSON {
 
 	private static HttpURLConnection connections;
@@ -34,8 +33,8 @@ public class readingJSON {
 	      connections.setRequestMethod("GET");//APi needs a get method to get the data, can also use other methods, but exchangeratesapi uses GET.
 	      connections.setConnectTimeout(5000);//timeout after 5 seconds of not receiving a respond from the server
 	      connections.setReadTimeout(5000);
-	      
-	      int status = connections.getResponseCode();
+
+        int status = connections.getResponseCode(); //sending a GET response to the server. The server responds with a status code
 	      System.out.println(status);
 		
 	      if (status > 299) {
@@ -90,9 +89,9 @@ public class readingJSON {
 
 		    	  //There has be an easier way of doing this rather than doing it individually. 
 		    	  System.out.println("THERE HAS TO BE AN EASIER WAY OF DOING THIS BUT IT WORKS FOR NOW");
-		      
-		      
-		} catch (ParseException e1) { //I dont know what this does
+
+
+        } catch (ParseException e1) { //I dont know what this does
 			// TODO Auto-generated catch block
 			System.out.println();
 		}
