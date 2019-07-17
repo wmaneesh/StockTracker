@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 
 //import org.json.simple.JSONObject;
 
@@ -23,10 +24,20 @@ public class readingJSON {
         String line;
         StringBuffer responseContent = new StringBuffer();
 
-        //Method 1 to call HTTP in Java: java.net.HttpURLConnection. This is a method i found online
+        Scanner input = new Scanner(System.in);
 
+        // Getting base and quote currency
+        System.out.print("Enter base pair: ");
+        String base = input.next();
+
+        System.out.print("Enter quote pair: ");
+        String quote = input.next();
+
+
+        //Method 1 to call HTTP in Java: java.net.HttpURLConnection. This is a method i found online
         URL url = new URL("https://api.exchangeratesapi.io/latest?base=EUR&symbols=CAD,USD,AUD,GBP,JPY,NZD"); //get rates from API. I have no idea what the SPEC means
-        connections = (HttpURLConnection) url.openConnection();
+        URL EUR_USD = new URL("https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=" + base + "&to_symbol=" + quote + "&interval=5min&apikey=S1T571A43RNAAHXQ");
+        connections = (HttpURLConnection) EUR_USD.openConnection();
 
         //request setup using HTTP
 
@@ -59,38 +70,24 @@ public class readingJSON {
         try { //I DONT KNOW WHAT THIS DOES
             objFromRequest = (JSONObject) parser.parse(responseContent.toString()); //i dont know why this needs a try. Basically youre passing the String into the JSON Obj
             //called objFromRequest. FOr some reason you need to Cast it. I dont know why.
-            String base = objFromRequest.get("base").toString();
-            System.out.printf("Base Currency pair is %s\n", base); //prints out just the Base currency that we received from the API
-            System.out.printf("Currency pair values as of %s\n", objFromRequest.get("date").toString()); //print the date the data was pulled on
 
-            JSONObject pairs = (JSONObject) objFromRequest.get("rates"); //get the Rates that the server sends and save it in pairs
+            JSONObject metaData = (JSONObject) objFromRequest.get("Meta Data"); //create object to pull fields from "Meta Data"
+            String timeStamp = (String) metaData.get("4. Last Refreshed"); //pull the timestamp field under Meta Data object"
+            System.out.printf("Time Stamp (UTC): %s\n ", timeStamp); //pulling the latest TimeStamp
 
-            double CAD = (double) pairs.get("CAD");  //I dont know how to get all the pairs without writing 10 lines of code :(
-            System.out.printf("Currency Pair %s/CAD = %f\n", base, CAD);//Prints the EUR/* value after getting it from the API
+            JSONObject pairInfo = (JSONObject) objFromRequest.get("Time Series FX (5min)"); //creating an object to pull fields from "Time series" Object
+            JSONObject closingValue = (JSONObject) pairInfo.get(timeStamp); //pull the closing value from the Time series given the timeStamp.
 
-            double USD = (double) pairs.get("USD");
-            System.out.printf("Currency Pair %s/USD = %f\n", base, USD);
-
-            double AUD = (double) pairs.get("AUD");
-            System.out.printf("Currency Pair %s/AUD = %f\n", base, AUD);
-
-            double GBP = (double) pairs.get("GBP");
-            System.out.printf("Currency Pair %s/GBP = %f\n", base, GBP);
-
-            double JPY = (double) pairs.get("JPY");
-            System.out.printf("Currency Pair %s/JPY = %f\n", base, JPY);
-
-            double NZD = (double) pairs.get("NZD");
-            System.out.printf("Currency Pair %s/NZD = %f\n", base, NZD);
+            String value = (String) closingValue.get("4. close");
+            System.out.printf("Closing value of " + base + "/" + quote + ": %s\n", value);
 
             //There has be an easier way of doing this rather than doing it individually.
             System.out.println("THERE HAS TO BE AN EASIER WAY OF DOING THIS BUT IT WORKS FOR NOW");
 
         } catch (ParseException e1) { //I dont know what this does
             // TODO Auto-generated catch block
-            System.out.println();
+            System.out.println(e1.toString());
         }
-
 
     }
 
