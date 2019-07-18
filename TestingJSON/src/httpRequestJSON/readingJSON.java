@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-//import org.json.simple.JSONObject;
+import java.util.Hashtable;
+
+
 
 public class readingJSON {
 
@@ -38,8 +40,9 @@ public class readingJSON {
         System.out.println(status);
 
         if (status > 299) {
-            reader = new BufferedReader(new InputStreamReader(connections.getErrorStream())); //BuffeReader if the server is not accessible.
-            while ((line = reader.readLine()) != null) {//I DONT UNDERSTAND HOW THIS WORKS
+            reader = new BufferedReader(new InputStreamReader(connections.getErrorStream())); //BufferedReader if the server is not accessible.
+            while ((line = reader.readLine()) != null) {//I DONT UNDERSTAND HOW THIS WORKS  // I think it reads the lines until it reads all of the string until the null character at th end
+
                 responseContent.append(line);
             }
             reader.close();
@@ -65,6 +68,17 @@ public class readingJSON {
 
             JSONObject pairs = (JSONObject) objFromRequest.get("rates"); //get the Rates that the server sends and save it in pairs
 
+            String[] currencies = {"CAD", "USD", "AUD", "GBP", "JPY", "NZD"}; //List of currencies to pair with base currency
+
+            Hashtable<String, Double> pairQuote = new Hashtable<String, Double>(); //Hashtable to store quote for other currency
+
+            //Loop to add all the data to the hashtable and then print pairs
+            for (int i = 0; i < 5; i++){
+                pairQuote.put(currencies[i], (double)pairs.get(currencies[i]));
+                System.out.printf("Currency Pair %s/" + currencies[i] + "= %f\n", base, pairQuote.get(currencies[i]));
+            }
+
+            /*
             double CAD = (double) pairs.get("CAD");  //I dont know how to get all the pairs without writing 10 lines of code :(
             System.out.printf("Currency Pair %s/CAD = %f\n", base, CAD);//Prints the EUR/* value after getting it from the API
 
@@ -82,6 +96,7 @@ public class readingJSON {
 
             double NZD = (double) pairs.get("NZD");
             System.out.printf("Currency Pair %s/NZD = %f\n", base, NZD);
+            */
 
             //There has be an easier way of doing this rather than doing it individually.
             System.out.println("THERE HAS TO BE AN EASIER WAY OF DOING THIS BUT IT WORKS FOR NOW");
@@ -90,7 +105,6 @@ public class readingJSON {
             // TODO Auto-generated catch block
             System.out.println();
         }
-
 
     }
 
