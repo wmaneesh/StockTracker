@@ -50,7 +50,7 @@ public class readingJSON {
 
         if (status > 299) {
             reader = new BufferedReader(new InputStreamReader(connections.getErrorStream())); //BuffeReader if the server is not accessible.
-            while ((line = reader.readLine()) != null) {//I DONT UNDERSTAND HOW THIS WORKS
+            while ((line = reader.readLine()) != null) {
                 responseContent.append(line);
             }
             reader.close();
@@ -67,9 +67,9 @@ public class readingJSON {
         JSONParser parser = new JSONParser(); //parser that allows to take the string received by the server and putting it into JSON format
         JSONObject objFromRequest; //since the respond from the server is an Object, we create a JSON object that we can parse in the string to
 
-        try { //I DONT KNOW WHAT THIS DOES
+        try { 
             objFromRequest = (JSONObject) parser.parse(responseContent.toString()); //i dont know why this needs a try. Basically youre passing the String into the JSON Obj
-            //called objFromRequest. FOr some reason you need to Cast it. I dont know why.
+            //called objFromRequest.
 
             JSONObject metaData = (JSONObject) objFromRequest.get("Meta Data"); //create object to pull fields from "Meta Data"
             String timeStamp = (String) metaData.get("4. Last Refreshed"); //pull the timestamp field under Meta Data object"
@@ -82,9 +82,8 @@ public class readingJSON {
             System.out.printf("Closing value of " + base + "/" + quote + ": %s\n", value);
 
             //There has be an easier way of doing this rather than doing it individually.
-            System.out.println("THERE HAS TO BE AN EASIER WAY OF DOING THIS BUT IT WORKS FOR NOW");
 
-        } catch (ParseException e1) { //I dont know what this does
+        } catch (ParseException e1) { //
             // TODO Auto-generated catch block
             System.out.println(e1.toString());
         }
